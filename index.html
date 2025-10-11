@@ -3,147 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <title>Centro de Flasheo ESP32</title>
+
+  <!-- Librería de flasheo -->
   <script type="module" src="https://unpkg.com/esp-web-tools@10.1.0/dist/web/install-button.js"></script>
-  <style>
-    /* === CONFIGURACIÓN GLOBAL === */
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background: black;
-      color: #cfdad1;
-      font-family: 'Consolas', 'Courier New', monospace;
-      letter-spacing: 0.5px;
-    }
 
-    /* === FONDO MATRIX === */
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      background: black;
-    }
-
-    /* === CONTENEDOR CENTRADO === */
-    .center {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    /* === TARJETA CYBER === */
-    .card {
-      background: rgba(10, 25, 15, 0.85);
-      border: 2px solid #00ff80;
-      box-shadow:
-        0 0 10px #00ff80,
-        0 0 20px rgba(0, 255, 128, 0.3),
-        inset 0 0 10px rgba(0, 255, 128, 0.2);
-      border-radius: 16px;
-      padding: 40px 60px;
-      text-align: center;
-      max-width: 450px;
-      backdrop-filter: blur(8px);
-      animation: appear 1s ease-out forwards;
-    }
-
-    @keyframes appear {
-      from { transform: scale(0.95); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-
-    h1 {
-      color: #00ff99;
-      text-shadow:
-        0 0 8px #00ff99,
-        0 0 15px rgba(0, 255, 153, 0.6);
-      font-size: 1.8rem;
-      margin-bottom: 10px;
-    }
-
-    p {
-      color: #a6ffda;
-      font-size: 1rem;
-      margin-bottom: 20px;
-    }
-
-    select {
-      margin-top: 10px;
-      padding: 10px 15px;
-      border-radius: 8px;
-      border: 1px solid #00ff99;
-      background: rgba(0, 30, 15, 0.8);
-      color: #00ff99;
-      font-size: 1rem;
-      box-shadow: 0 0 10px rgba(0, 255, 128, 0.2);
-      outline: none;
-      transition: 0.3s;
-    }
-
-    select:hover, select:focus {
-      background: rgba(0, 60, 30, 0.9);
-      box-shadow: 0 0 15px rgba(0, 255, 128, 0.4);
-    }
-
-    /* === BARRA DE PROGRESO === */
-    #progress {
-      width: 80%;
-      height: 20px;
-      margin: 20px auto;
-      background: rgba(0, 40, 20, 0.8);
-      border-radius: 10px;
-      overflow: hidden;
-      border: 1px solid #00ff80;
-    }
-
-    #progress-bar {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #00ff80, #00e6ff);
-      box-shadow: 0 0 10px #00ff99;
-      transition: width 0.3s ease;
-    }
-
-    #status {
-      margin-top: 15px;
-      color: #00e6ff;
-      font-weight: bold;
-      text-shadow: 0 0 10px rgba(0, 230, 255, 0.5);
-    }
-
-    /* === BOTÓN CONNECT === */
-    esp-web-install-button::part(button) {
-      background: linear-gradient(90deg, #00ff80, #00e6ff);
-      color: black;
-      font-weight: bold;
-      border: none;
-      border-radius: 8px;
-      padding: 12px 28px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 20px;
-      text-transform: uppercase;
-      box-shadow:
-        0 0 10px #00ff80,
-        0 0 25px rgba(0, 230, 255, 0.4);
-      transition: all 0.2s ease-in-out;
-    }
-
-    esp-web-install-button::part(button):hover {
-      box-shadow:
-        0 0 20px #00ff99,
-        0 0 40px rgba(0, 230, 255, 0.6);
-      transform: scale(1.05);
-    }
-  </style>
+  <!-- Archivos propios -->
+  <link rel="stylesheet" href="css/style.css" />
+  <script defer src="js/flasher.js"></script>
+  <script defer src="js/conexiones.js"></script>
 </head>
 
 <body>
@@ -159,80 +26,14 @@
         <option value="firmwares/jammer/manifest1.json">Jammer con Botón</option>
       </select>
 
+      <button id="viewConnections" style="display:none;">🔍 Ver conexiones</button>
+      <div id="connectionsInfo" style="display:none;"></div>
+
       <esp-web-install-button id="flashBtn"></esp-web-install-button>
 
       <div id="status">Esperando conexión...</div>
       <div id="progress"><div id="progress-bar"></div></div>
     </div>
   </div>
-
-  <script>
-    /* === CONTROL DEL FLASHER === */
-    const btn = document.querySelector("#flashBtn");
-    const selector = document.querySelector("#firmware");
-    const status = document.querySelector("#status");
-    const progressBar = document.querySelector("#progress-bar");
-
-    selector.addEventListener("change", () => {
-      btn.setAttribute("manifest", selector.value);
-    });
-    btn.setAttribute("manifest", selector.value);
-
-    btn.addEventListener("install-click", () => {
-      status.textContent = "🔌 Conectando al ESP32...";
-      progressBar.style.width = "10%";
-    });
-
-    btn.addEventListener("installing", () => {
-      status.textContent = "⚙️ Flasheando firmware...";
-      progressBar.style.width = "60%";
-    });
-
-    btn.addEventListener("install-complete", () => {
-      status.textContent = "✅ Instalación completada con éxito!";
-      progressBar.style.width = "100%";
-    });
-
-    btn.addEventListener("install-error", () => {
-      status.textContent = "❌ Error durante la instalación. Revisá la conexión.";
-      progressBar.style.width = "0%";
-    });
-  </script>
-
-  <script>
-    /* === ANIMACIÓN MATRIX === */
-    const canvas = document.getElementById("matrix");
-    const ctx = canvas.getContext("2d");
-    canvas.height = window.innerHeight;
-    canvas.width = window.innerWidth;
-
-    const binary = "01";
-    const fontSize = 16;
-    const columns = canvas.width / fontSize;
-    const drops = [];
-
-    for (let x = 0; x < columns; x++) drops[x] = 1;
-
-    function draw() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "#00ff80";
-      ctx.font = fontSize + "px monospace";
-
-      for (let i = 0; i < drops.length; i++) {
-        const text = binary[Math.floor(Math.random() * binary.length)];
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975)
-          drops[i] = 0;
-        drops[i]++;
-      }
-    }
-
-    setInterval(draw, 33);
-    window.addEventListener("resize", () => {
-      canvas.height = window.innerHeight;
-      canvas.width = window.innerWidth;
-    });
-  </script>
 </body>
 </html>
