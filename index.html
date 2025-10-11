@@ -20,14 +20,15 @@
         border-radius: 16px;
         box-shadow: 0 0 20px rgba(0,0,0,0.4);
       }
-      select, button {
+      select {
         margin-top: 20px;
         padding: 10px 15px;
         border-radius: 8px;
         border: none;
+        background: #334155;
+        color: #e2e8f0;
         font-size: 1rem;
       }
-      select { background: #334155; color: #e2e8f0; }
       esp-web-install-button { margin-top: 25px; }
       #status { margin-top: 20px; font-weight: bold; }
       #progress {
@@ -48,9 +49,10 @@
       <p>Seleccioná el firmware que querés instalar y conectá tu placa.</p>
 
       <select id="firmware">
-        <option value="firmwares/sensor_wifi/build/manifest.json">📶 Sensor WiFi</option>
-        <option value="firmwares/rele_bluetooth/build/manifest.json">🔌 Relé Bluetooth</option>
-        <option value="firmwares/medidor_temperatura/build/manifest.json">🌡️ Medidor de Temperatura</option>
+        <option value="firmwares/prueba/manifest.json">🔥 Prueba (actual)</option>
+        <option value="firmwares/sensor_wifi/manifest.json">📶 Sensor WiFi</option>
+        <option value="firmwares/rele_bluetooth/manifest.json">🔌 Relé Bluetooth</option>
+        <option value="firmwares/medidor_temperatura/manifest.json">🌡️ Medidor de Temperatura</option>
       </select>
 
       <esp-web-install-button id="flashBtn"></esp-web-install-button>
@@ -65,7 +67,6 @@
       const status = document.querySelector("#status");
       const progressBar = document.querySelector("#progress-bar");
 
-      // cambia el manifest según el firmware elegido
       selector.addEventListener("change", () => {
         btn.setAttribute("manifest", selector.value);
       });
