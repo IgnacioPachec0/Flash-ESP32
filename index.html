@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Centro de Flasheo ESP32</title>
+    <script type="module" src="https://unpkg.com/esp-web-tools@10.1.0/dist/web/install-button.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #0f172a;
+        color: #e2e8f0;
+        text-align: center;
+        margin-top: 60px;
+      }
+      h1 { color: #38bdf8; }
+      .card {
+        background: #1e293b;
+        display: inline-block;
+        padding: 30px 50px;
+        border-radius: 16px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.4);
+      }
+      select, button {
+        margin-top: 20px;
+        padding: 10px 15px;
+        border-radius: 8px;
+        border: none;
+        font-size: 1rem;
+      }
+      select { background: #334155; color: #e2e8f0; }
+      esp-web-install-button { margin-top: 25px; }
+      #status { margin-top: 20px; font-weight: bold; }
+      #progress {
+        width: 80%; height: 20px; margin: 20px auto;
+        background: #334155; border-radius: 10px; overflow: hidden;
+      }
+      #progress-bar {
+        height: 100%; width: 0%;
+        background: linear-gradient(90deg, #06b6d4, #3b82f6);
+        transition: width 0.3s ease;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="card">
+      <h1>🚀 Flashear tu ESP32</h1>
+      <p>Seleccioná el firmware que querés instalar y conectá tu placa.</p>
+
+      <select id="firmware">
+        <option value="firmwares/sensor_wifi/build/manifest.json">📶 Sensor WiFi</option>
+        <option value="firmwares/rele_bluetooth/build/manifest.json">🔌 Relé Bluetooth</option>
+        <option value="firmwares/medidor_temperatura/build/manifest.json">🌡️ Medidor de Temperatura</option>
+      </select>
+
+      <esp-web-install-button id="flashBtn"></esp-web-install-button>
+
+      <div id="status">Esperando conexión...</div>
+      <div id="progress"><div id="progress-bar"></div></div>
+    </div>
+
+    <script>
+      const btn = document.querySelector("#flashBtn");
+      const selector = document.querySelector("#firmware");
+      const status = document.querySelector("#status");
+      const progressBar = document.querySelector("#progress-bar");
+
+      // cambia el manifest según el firmware elegido
+      selector.addEventListener("change", () => {
+        btn.setAttribute("manifest", selector.value);
+      });
+      btn.setAttribute("manifest", selector.value);
+
+      btn.addEventListener("install-click", () => {
+        status.textContent = "🔌 Conectando al ESP32...";
+        progressBar.style.width = "10%";
+      });
+
+      btn.addEventListener("installing", () => {
+        status.textContent = "⚙️ Flasheando firmware...";
+        progressBar.style.width = "60%";
+      });
+
+      btn.addEventListener("install-complete", () => {
+        status.textContent = "✅ Instalación completada con éxito!";
+        progressBar.style.width = "100%";
+      });
+
+      btn.addEventListener("install-error", () => {
+        status.textContent = "❌ Error durante la instalación. Revisá la conexión.";
+        progressBar.style.width = "0%";
+      });
+    </script>
+  </body>
+</html>
