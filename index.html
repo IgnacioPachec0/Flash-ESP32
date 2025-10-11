@@ -2,20 +2,21 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Centro de Flasheo ESP32</title>
 
-  <!-- Librería de flasheo -->
+  <!-- Librería oficial de ESP Web Tools -->
   <script type="module" src="https://unpkg.com/esp-web-tools@10.1.0/dist/web/install-button.js"></script>
 
-  <!-- Archivos propios -->
+  <!-- Estilos generales -->
   <link rel="stylesheet" href="css/style.css" />
-  <script defer src="js/flasher.js"></script>
-  <script defer src="js/conexiones.js"></script>
 </head>
 
 <body>
+  <!-- Fondo Matrix animado -->
   <canvas id="matrix"></canvas>
 
+  <!-- Contenido principal -->
   <div class="center">
     <div class="card">
       <h1>⚡ Flashear tu ESP32</h1>
@@ -26,14 +27,23 @@
         <option value="firmwares/jammer/manifest1.json">Jammer con Botón</option>
       </select>
 
+      <!-- 🔍 Botón dinámico para ver conexiones -->
       <button id="viewConnections" style="display:none;">🔍 Ver conexiones</button>
-      <div id="connectionsInfo" style="display:none;"></div>
 
+      <!-- 📘 Cuadro con información de pines -->
+      <div id="connectionsInfo"></div>
+
+      <!-- 🚀 Botón de instalación (ESP Web Tools) -->
       <esp-web-install-button id="flashBtn"></esp-web-install-button>
 
+      <!-- Barra de progreso e información de estado -->
       <div id="status">Esperando conexión...</div>
       <div id="progress"><div id="progress-bar"></div></div>
     </div>
   </div>
+
+  <!-- Scripts principales -->
+  <script defer src="js/flasher.js"></script>
+  <script defer src="js/conexiones.js"></script>
 </body>
 </html>
