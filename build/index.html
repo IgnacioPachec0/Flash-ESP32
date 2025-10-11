@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Flashear tu ESP32</title>
+    <script type="module" src="https://unpkg.com/esp-web-tools@10.1.0/dist/web/install-button.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #0f172a;
+        color: #e2e8f0;
+        text-align: center;
+        margin-top: 80px;
+      }
+      h1 {
+        color: #38bdf8;
+      }
+      .card {
+        background: #1e293b;
+        display: inline-block;
+        padding: 30px 50px;
+        border-radius: 16px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+      }
+      esp-web-install-button {
+        margin-top: 25px;
+      }
+      #status {
+        margin-top: 20px;
+        font-weight: bold;
+      }
+      #progress {
+        width: 80%;
+        height: 20px;
+        margin: 20px auto;
+        background: #334155;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      #progress-bar {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #06b6d4, #3b82f6);
+        transition: width 0.3s ease;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="card">
+      <h1>🚀 Flashear tu ESP32</h1>
+      <p>Conectá tu placa y presioná el botón para comenzar la instalación.</p>
+
+      <esp-web-install-button id="flashBtn" manifest="manifest.json"></esp-web-install-button>
+
+      <div id="status">Esperando conexión...</div>
+
+      <div id="progress">
+        <div id="progress-bar"></div>
+      </div>
+    </div>
+
+    <script>
+      const btn = document.querySelector("#flashBtn");
+      const status = document.querySelector("#status");
+      const progressBar = document.querySelector("#progress-bar");
+
+      btn.addEventListener("install-click", () => {
+        status.textContent = "🔌 Conectando al ESP32...";
+        progressBar.style.width = "10%";
+      });
+
+      btn.addEventListener("installing", (e) => {
+        status.textContent = "⚙️ Flasheando firmware...";
+        progressBar.style.width = "60%";
+      });
+
+      btn.addEventListener("install-complete", () => {
+        status.textContent = "✅ Instalación completada con éxito!";
+        progressBar.style.width = "100%";
+      });
+
+      btn.addEventListener("install-error", (e) => {
+        status.textContent = "❌ Error durante la instalación. Revisá la conexión.";
+        progressBar.style.width = "0%";
+      });
+    </script>
+  </body>
+</html>

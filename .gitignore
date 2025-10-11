@@ -1,0 +1,11 @@
+/.DS_Store
+# IDE / system
+.vscode/
+*.swp
+*.swo
+
+# Python caches
+__pycache__/
+
+# macOS
+Icon\r

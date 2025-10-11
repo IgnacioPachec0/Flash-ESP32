@@ -1,0 +1,15 @@
+{
+  "name": "Prueba ESP32",
+  "version": "1.0.0",
+  "builds": [
+    {
+      "chipFamily": "ESP32",
+      "improv": false,
+      "parts": [
+        { "path": "prueba.ino.bootloader.bin", "offset": 4096 },
+        { "path": "prueba.ino.partitions.bin", "offset": 32768 },
+        { "path": "prueba.ino.bin", "offset": 65536 }
+      ]
+    }
+  ]
+}
