@@ -1,5 +1,5 @@
 {
-  "name": "Prueba ESP32",
+  "name": "Jammer con boton ESP32",
   "version": "1.0.0",
   "builds": [
     {
