@@ -3,7 +3,7 @@
 Interfaz web para flashear firmwares en placas **ESP32** directamente desde el navegador, sin necesidad de usar Arduino IDE ni cables adicionales más allá del USB.
 
 🌐 **Sitio en línea:**  
-👉 [https://ignaciopacheco61.github.io/Flash-ESP32/](https://ignaciopacheco61.github.io/Flash-ESP32/)
+👉 [https://ignaciopacheco0.github.io/Flash-ESP32/](https://ignaciopachec0.github.io/Flash-ESP32/)
 
 ---
 
